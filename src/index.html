@@ -8,17 +8,16 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div id="map"></div>
-<div id="filterMenu">
-  <ul>
-    <li>Starbucks</li>
-    <li>Costco's</li>
-    <li>Trader Joe's</li>
-  </ul>
-</div>
-<script src="js/lib/jquery-2.1.4.min.js"></script>
-<script src="js/lib/knockout-3.4.0.js"></script>
-<script src="js/app.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?callback=app.initMap"></script>
+  <div id="map"></div>
+  <div id="filterMenu">
+    <input id="filterInput" placeholder="Filter by name" data-bind="textInput: filter, event: {input: filterList}">
+    <ul data-bind="foreach: places">
+      <li data-bind="text: name, visible: filtered"></li>
+    </ul>
+  </div>
+  <script src="js/lib/jquery-2.1.4.min.js"></script>
+  <script src="js/lib/knockout-3.4.0.js"></script>
+  <script src="js/app.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=app.initMap"></script>
 </body>
 </html>
