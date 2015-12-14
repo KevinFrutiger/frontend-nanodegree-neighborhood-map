@@ -48,6 +48,7 @@ $(function() {
     var self = this;
     this.map = null;
     this.markers = {};
+    this.infoWindows = {};
 
     this.filter = ko.observable('');
 
@@ -64,6 +65,17 @@ $(function() {
       });
 
       self.refreshMarkers();
+    };
+
+    this.getPlaceFromId = function(placeId) {
+      console.log(placeId);
+      for (var i = 0, len = self.places().length; i < len; i++) {
+
+        if (self.places()[i].placeId == placeId) {
+          console.log('found place');
+          return self.places()[i];
+        }
+      }
     };
 
     this.initMap = function() {
@@ -84,6 +96,8 @@ $(function() {
     app.initMap = this.initMap;
 
     this.addMarker = function(placeId, location) {
+      // TODO: Animate-in markers.
+
       var marker = new google.maps.Marker({
           map: self.map,
           place: {
@@ -92,8 +106,22 @@ $(function() {
           }
         });
 
+      marker.addListener('click', function() {
+        self.addInfoWindow(marker, placeId);
+      });
+
       self.markers[placeId] = marker;
 
+    };
+
+    this.addInfoWindow = function(marker, placeId) {
+      var place = self.getPlaceFromId(placeId);
+
+      var infoWindowOptions = {
+        content: place.name
+      }
+      var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      infoWindow.open(self.map, marker);
     };
 
     this.refreshMarkers = function() {
