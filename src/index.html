@@ -12,7 +12,7 @@
   <div id="filterMenu">
     <input id="filterInput" placeholder="Filter by name" data-bind="textInput: filter, event: {input: filterList}">
     <ul data-bind="foreach: places">
-      <li data-bind="text: name, visible: filtered"></li>
+      <li data-bind="text: name, visible: filtered, click: $root.listClick"></li>
     </ul>
   </div>
   <script src="js/lib/jquery-2.1.4.min.js"></script>

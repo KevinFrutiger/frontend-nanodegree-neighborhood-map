@@ -2,10 +2,10 @@ var app = {};
 
 $(function() {
 
-  // Initial places from which to build the observalbe array for the list.
+  // Initial place names from which to build the observable array for the list.
   var initialPlacesData = [
     'South San Francisco BART Station',
-    'Starbucks',
+    'See\'s Candies',
     'Trader Joe\'s',
     'Five Guys',
     'Paris Baguette'
@@ -39,6 +39,8 @@ $(function() {
     /** Whether the Place is included in filtered results.
         @type {boolean} */
     this.filtered = ko.observable(true);
+
+    this.wikipediaData = '';
   };
 
   /**
@@ -48,7 +50,9 @@ $(function() {
     var self = this;
     this.map = null;
     this.markers = {};
-    this.infoWindows = {};
+    this.infoWindow = null;
+    this.markerAnimationTimeout = null;
+    this.markerAnimationTimeoutDuration = 3000;
 
     this.filter = ko.observable('');
 
@@ -58,7 +62,13 @@ $(function() {
           return new Place(name);
     }));
 
+
     this.filterList = function() {
+      if (self.infoWindow) {
+        self.infoWindow.close();
+        self.infoWindow = null;
+      }
+
       self.places().forEach(function(place) {
         var re = new RegExp(self.filter(), 'ig');
         place.filtered(re.test(place.name));
@@ -67,12 +77,21 @@ $(function() {
       self.refreshMarkers();
     };
 
+    this.listClick = function(place) {
+      self.map.panTo(place.position);
+
+      var marker = self.markers[place.placeId];
+      self.toggleMarkerAnimation(marker);
+      self.addInfoWindow(marker, place.placeId);
+    };
+
+
+    /* Google Map functionality */
+
     this.getPlaceFromId = function(placeId) {
-      console.log(placeId);
       for (var i = 0, len = self.places().length; i < len; i++) {
 
-        if (self.places()[i].placeId == placeId) {
-          console.log('found place');
+        if (self.places()[i].placeId === placeId) {
           return self.places()[i];
         }
       }
@@ -96,17 +115,17 @@ $(function() {
     app.initMap = this.initMap;
 
     this.addMarker = function(placeId, location) {
-      // TODO: Animate-in markers.
-
       var marker = new google.maps.Marker({
           map: self.map,
           place: {
             placeId: placeId,
             location: location
-          }
+          },
+          animation: google.maps.Animation.DROP
         });
 
       marker.addListener('click', function() {
+        self.toggleMarkerAnimation(marker);
         self.addInfoWindow(marker, placeId);
       });
 
@@ -114,14 +133,149 @@ $(function() {
 
     };
 
+    this.toggleMarkerAnimation = function(markerToAnimate) {
+      // Loop through all markers and set their animation state.
+      for (var key in self.markers) {
+        var marker = self.markers[key];
+
+        // If this is the marker we want to animate and it's not
+        // already animating.
+        if (marker === markerToAnimate && !marker.getAnimation()) {
+          // Animate it.
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+
+          // Set a timeout to stop this marker from bouncing indefinitely.
+          self.markerAnimationTimeout = setTimeout(
+              self.createAnimationTimeoutHandler(marker),
+              self.markerAnimationTimeoutDuration
+          );
+        } else {
+          // Stop the animation.
+          marker.setAnimation(null);
+        }
+      }
+    };
+
+    this.createAnimationTimeoutHandler = function(currentMarker) {
+      return function() {
+        currentMarker.setAnimation(null);
+      };
+    };
+
     this.addInfoWindow = function(marker, placeId) {
+      // If the info window is already opened, clean up and close it.
+      if (self.infoWindow) {
+        google.maps.event.clearListeners(self.infoWindow, 'closeclick');
+        self.infoWindow.close();
+      }
+
       var place = self.getPlaceFromId(placeId);
 
+      // Build nodes for info window content. In order to control the
+      // width of the info window, we have to wrap the content in a div.
+      var contentElement = document.createElement('div');
+      contentElement.id = 'info-window-content';
+
+      var infoHeaderElement = document.createElement('div');
+      infoHeaderElement.className = 'info-window-heading';
+      infoHeaderElement.appendChild(document.createTextNode(place.name));
+
+      var statusElement = document.createElement('div');
+      statusElement.className = 'info-status';
+      statusElement.appendChild(
+          document.createTextNode('Getting more information...'));
+
+      contentElement.appendChild(infoHeaderElement);
+      contentElement.appendChild(statusElement);
+
       var infoWindowOptions = {
-        content: place.name
+        content: contentElement
+      };
+
+      self.infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+
+      self.infoWindow.addListener('closeclick', function() {
+        // Stop marker animation.
+        marker.setAnimation(null);
+
+        self.infoWindow = null;
+      });
+
+      self.infoWindow.addListener('domready', function() {
+        self.populateInfoWindow(place);
+        google.maps.event.clearListeners(self.infoWindow, 'domready');
+      })
+
+      // Show the info window.
+      self.infoWindow.open(self.map, marker);
+    };
+
+    this.populateInfoWindow = function(place) {
+
+      // WikiPedia Data
+      if (place.wikipediaData) {
+        self.appendInfo(place.wikipediaData);
+      } else {
+        // jQuery AJAX for JSONP does not fire an error handler.
+        // So, set a timeout.
+        var wikiRequestTimeout = setTimeout(function() {
+            console.warn('wiki request timed out');
+        }, 8000);
+
+        var wikiUrl = 'https://en.wikipedia.org/w/api.php';
+        var settings = {
+            dataType: 'jsonp',
+            data: { // Wikipedia query fields
+                action: 'opensearch',
+                search: place.name,
+                format: 'json',
+                formatversion: 2
+            },
+            success: function(data, status, jqXHR) {
+                clearTimeout(wikiRequestTimeout);
+
+                var html = '';
+
+                if (data[2][0]) {
+                  var snippet = '<blockquote>' + data[2][0] + '<blockquote>';
+                  var url = data[3][0];
+
+                  var citation = '<a href="' + url + '" target="_blank">' +
+                                 'Wikipedia</a>';
+
+                  html = '<blockquote>' + snippet + '<blockquote>' +
+                         '<cite class="info-window-citation">' + citation +
+                         '</cite>';
+
+                } else {
+                  html = '<blockquote>No additional information available.' +
+                         '<blockquote>';
+                }
+
+                self.appendInfo(html);
+                place.wikipediaData = html;
+            }
+        };
+
+        $.ajax(wikiUrl, settings);
       }
-      var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-      infoWindow.open(self.map, marker);
+    };
+
+    this.appendInfo = function(str) {
+      // Get the DOM tree that was used to set the content.
+      var infoElement = self.infoWindow.getContent();
+
+      // Replace the status text and add the new data.
+      var infoStr = infoElement.innerHTML;
+      infoStr = infoStr.replace(
+          '<div class="info-status">Getting more information...</div>', '');
+      infoStr += str;
+
+      // Update the info window content.
+      // TODO: Info Window UI is sometimes slow to update, leaving text
+      // hanging out on its own. Need to see if there's a different way to
+      // update the content to alleviate that.
+      infoElement.innerHTML = infoStr;
     };
 
     this.refreshMarkers = function() {
@@ -133,9 +287,11 @@ $(function() {
               query: place.name
             };
 
+            // Query the Places API.
             self.placesService.textSearch(request, function(results, status) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
-                self.addMarker(results[0].place_id, results[0].geometry.location)
+                self.addMarker(results[0].place_id,
+                               results[0].geometry.location);
 
                 // Store data to our Places object so we don't have to requery.
                 place.placeId = results[0].place_id;
@@ -144,7 +300,11 @@ $(function() {
               }
             });
           } else {
-            self.markers[place.placeId].setVisible(place.filtered());
+            var marker = self.markers[place.placeId];
+            marker.setVisible(place.filtered());
+            if (marker.getAnimation() !== null) {
+              marker.setAnimation(null);
+            }
           }
       });
 

@@ -16,3 +16,27 @@ body {
   width: 100%;
   height: 100%;
 }
+
+.info-window-heading {
+  font-weight: bold;
+}
+
+blockquote {
+  margin: 0;
+  padding: 10px 0;
+}
+
+.info-status {
+  color: #ccc;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.info-window-citation::before {
+  content: 'Source: ';
+}
+
+#info-window-content {
+  width: 100%;
+  max-width: 300px;
+}
