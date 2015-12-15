@@ -9,8 +9,8 @@
 </head>
 <body>
   <div id="map"></div>
-  <div id="filterMenu">
-    <input id="filterInput" placeholder="Filter by name" data-bind="textInput: filter, event: {input: filterList}">
+  <div id="filter-menu">
+    <input id="filter-input" placeholder="Filter by name" data-bind="textInput: filter, event: {input: filterList}">
     <ul data-bind="foreach: places">
       <li data-bind="text: name, visible: filtered, click: $root.listClick"></li>
     </ul>

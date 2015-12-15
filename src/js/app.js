@@ -172,7 +172,7 @@ $(function() {
       var place = self.getPlaceFromId(placeId);
 
       // Build nodes for info window content. In order to control the
-      // width of the info window, we have to wrap the content in a div.
+      // width of the info window, we have to wrap the content.
       var contentElement = document.createElement('div');
       contentElement.id = 'info-window-content';
 
@@ -188,6 +188,7 @@ $(function() {
       contentElement.appendChild(infoHeaderElement);
       contentElement.appendChild(statusElement);
 
+      // Create the info window object.
       var infoWindowOptions = {
         content: contentElement
       };
@@ -201,9 +202,12 @@ $(function() {
         self.infoWindow = null;
       });
 
+      // Update the info window when it's DOM is ready.
       self.infoWindow.addListener('domready', function() {
-        self.populateInfoWindow(place);
+        // Event firest every time content is updated, so remove the listener.
         google.maps.event.clearListeners(self.infoWindow, 'domready');
+
+        self.populateInfoWindow(place);
       })
 
       // Show the info window.
@@ -212,16 +216,19 @@ $(function() {
 
     this.populateInfoWindow = function(place) {
 
-      // WikiPedia Data
+      // If we already have Wikipedia data, use it.
       if (place.wikipediaData) {
+
         self.appendInfo(place.wikipediaData);
+
       } else {
-        // jQuery AJAX for JSONP does not fire an error handler.
-        // So, set a timeout.
+
+        // jQuery JSONP does not call an error handler. So, set a timeout.
         var wikiRequestTimeout = setTimeout(function() {
             console.warn('wiki request timed out');
         }, 8000);
 
+        // Set up AJAX query and handlers.
         var wikiUrl = 'https://en.wikipedia.org/w/api.php';
         var settings = {
             dataType: 'jsonp',
@@ -234,48 +241,50 @@ $(function() {
             success: function(data, status, jqXHR) {
                 clearTimeout(wikiRequestTimeout);
 
-                var html = '';
+                var htmlString = '';
 
                 if (data[2][0]) {
-                  var snippet = '<blockquote>' + data[2][0] + '<blockquote>';
+                  var snippet = data[2][0];
                   var url = data[3][0];
 
                   var citation = '<a href="' + url + '" target="_blank">' +
                                  'Wikipedia</a>';
 
-                  html = '<blockquote>' + snippet + '<blockquote>' +
-                         '<cite class="info-window-citation">' + citation +
-                         '</cite>';
+                  htmlString = '<blockquote>' + snippet + '</blockquote>' +
+                      '<cite class="info-window-citation">' + citation +
+                      '</cite>';
 
                 } else {
-                  html = '<blockquote>No additional information available.' +
-                         '<blockquote>';
+                  htmlString = '<blockquote>No additional information ' +
+                               'available.<blockquote>';
                 }
 
-                self.appendInfo(html);
-                place.wikipediaData = html;
+                self.appendInfo(htmlString);
+                place.wikipediaData = htmlString;
             }
         };
 
+        // Get the data.
         $.ajax(wikiUrl, settings);
       }
     };
 
-    this.appendInfo = function(str) {
+    this.appendInfo = function(htmlString) {
       // Get the DOM tree that was used to set the content.
-      var infoElement = self.infoWindow.getContent();
+      // The info window UI is too slow to resize if we modify the node
+      // directly (text overflows). Thus, we're cloning the node so we can make
+      // changes and use use setContent() to update the info window.
+      var infoElement = self.infoWindow.getContent().cloneNode(true);
 
       // Replace the status text and add the new data.
       var infoStr = infoElement.innerHTML;
       infoStr = infoStr.replace(
           '<div class="info-status">Getting more information...</div>', '');
-      infoStr += str;
-
-      // Update the info window content.
-      // TODO: Info Window UI is sometimes slow to update, leaving text
-      // hanging out on its own. Need to see if there's a different way to
-      // update the content to alleviate that.
+      infoStr += htmlString;
       infoElement.innerHTML = infoStr;
+
+      // Update the info window with the updated node.
+      self.infoWindow.setContent(infoElement);
     };
 
     this.refreshMarkers = function() {
@@ -287,7 +296,7 @@ $(function() {
               query: place.name
             };
 
-            // Query the Places API.
+            // Query Google Places API.
             self.placesService.textSearch(request, function(results, status) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
                 self.addMarker(results[0].place_id,
