@@ -8,7 +8,8 @@ $(function() {
     'See\'s Candies',
     'Trader Joe\'s',
     'Five Guys',
-    'Paris Baguette'
+    'Paris Baguette',
+    'Starbucks'
   ];
 
   /**
@@ -38,7 +39,9 @@ $(function() {
 
     /** Whether the Place is included in filtered results.
         @type {boolean} */
-    this.filtered = ko.observable(true);
+    this.isFiltered = ko.observable(true);
+
+    this.isSelected = ko.observable(false);
 
     this.wikipediaData = '';
   };
@@ -54,14 +57,23 @@ $(function() {
     this.markerAnimationTimeout = null;
     this.markerAnimationTimeoutDuration = 3000;
 
-    this.filter = ko.observable('');
+    this.filterString = ko.observable('');
 
     // Build observable array of Places from initial data.
-    this.places = ko.observableArray(
-      initialPlacesData.map(function(name) {
-          return new Place(name);
-    }));
+    initialPlacesData = initialPlacesData.sort(function(a,b) {
+        if (a > b) {
+          return 1;
+        }
+        if (b > a) {
+          return -1;
+        }
 
+        return 0;
+    });
+
+    this.places = ko.observableArray(initialPlacesData.map(function(name) {
+        return new Place(name);
+      }));
 
     this.filterList = function() {
       if (self.infoWindow) {
@@ -70,19 +82,31 @@ $(function() {
       }
 
       self.places().forEach(function(place) {
-        var re = new RegExp(self.filter(), 'ig');
-        place.filtered(re.test(place.name));
+        // Set whether place should show in filtered results.
+        var re = new RegExp(self.filterString(), 'ig');
+        place.isFiltered(re.test(place.name));
+
+        // Reset highlighted selection.
+        self.toggleListItemSelection(null);
       });
 
       self.refreshMarkers();
     };
 
     this.listClick = function(place) {
+      self.toggleListItemSelection(place);
+
       self.map.panTo(place.position);
 
       var marker = self.markers[place.placeId];
       self.toggleMarkerAnimation(marker);
       self.addInfoWindow(marker, place.placeId);
+    };
+
+    this.toggleListItemSelection = function(place) {
+      self.places().forEach(function(currentPlace) {
+        currentPlace.isSelected(currentPlace === place);
+      });
     };
 
 
@@ -125,6 +149,7 @@ $(function() {
         });
 
       marker.addListener('click', function() {
+        self.toggleListItemSelection(self.getPlaceFromId(placeId));
         self.toggleMarkerAnimation(marker);
         self.addInfoWindow(marker, placeId);
       });
@@ -310,7 +335,7 @@ $(function() {
             });
           } else {
             var marker = self.markers[place.placeId];
-            marker.setVisible(place.filtered());
+            marker.setVisible(place.isFiltered());
             if (marker.getAnimation() !== null) {
               marker.setAnimation(null);
             }

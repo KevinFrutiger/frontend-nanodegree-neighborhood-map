@@ -1,17 +1,24 @@
-html,
+html {
+  height: 100%;
+
+  /* Prevent zooming of text when rotating to landscape. */
+  -webkit-text-size-adjust: 100%; /* iPhone */
+}
+
 body {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-.info-window-heading {
-  font-weight: bold;
+  font-family: Arial, sans-serif;
 }
 
 blockquote {
   margin: 0;
   padding: 10px 0;
+}
+
+.info-window-heading {
+  font-weight: bold;
 }
 
 .info-status {
@@ -24,21 +31,45 @@ blockquote {
   content: 'Source: ';
 }
 
+.filter-menu-list {
+  padding: 0;
+  margin: 0 -10px; /* Left/right margin should be negative of padding in parent */
+  border-top: 3px groove #d4d0be;
+}
+
+.filter-menu-list-item {
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+  border-top: 1px solid #d4d0be;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: #fff;
+}
+
+.filter-menu-list-item:first-child {
+  border-top: none;
+}
+
 #filter-menu {
   background-color: rgb(241, 237, 219);
   border-radius: 10px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
   position: absolute;
   width: 195px;
-  left: 8px;
-  top: 8px;
-  padding: 12px;
+  left: 10px;
+  top: 10px;
+  padding: 10px 10px 0;
   overflow-x: hidden;
   overflow-y: auto;
+  font: Arial, sans-serif;
 }
 
 #filter-input {
   width: 100%;
+  margin: 0 0 10px;
 }
 
 #map {

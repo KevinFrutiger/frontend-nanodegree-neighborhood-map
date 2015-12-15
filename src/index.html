@@ -10,9 +10,9 @@
 <body>
   <div id="map"></div>
   <div id="filter-menu">
-    <input id="filter-input" placeholder="Filter by name" data-bind="textInput: filter, event: {input: filterList}">
-    <ul data-bind="foreach: places">
-      <li data-bind="text: name, visible: filtered, click: $root.listClick"></li>
+    <input id="filter-input" placeholder="Filter by name" data-bind="textInput: filterString, event: {input: filterList}">
+    <ul class="filter-menu-list" data-bind="foreach: places">
+      <li class="filter-menu-list-item" data-bind="text: name, visible: isFiltered, css: { 'selected': isSelected }, click: $root.listClick"></li>
     </ul>
   </div>
   <script src="js/lib/jquery-2.1.4.min.js"></script>
