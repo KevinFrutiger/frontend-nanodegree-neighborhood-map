@@ -143,7 +143,7 @@ module.exports = function(grunt) {
   //grunt.loadNpmTasks('grunt-contrib-cssmin');
   //grunt.loadNpmTasks('grunt-contrib-htmlmin');
   //grunt.loadNpmTasks('grunt-contrib-imagemin');
-  //grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   //grunt.loadNpmTasks('grunt-contrib-uglify');
   //grunt.loadNpmTasks('grunt-pagespeed');
   //grunt.loadNpmTasks('grunt-replace');
