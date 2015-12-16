@@ -31,23 +31,23 @@ blockquote {
   padding: 10px 0;
 }
 
-/* TODO: Move this content into JS */
-.info-window-citation::before {
-  content: 'Source: ';
-}
-
 .filter-menu {
+  -webkit-align-content: flex-start; /* Safari 8 */
   align-content: flex-start;
   box-sizing: border-box;
+  display: -webkit-flex; /* Safari 8 */
   display: flex;
   height: 100%;
   overflow: hidden;
   position: absolute;
+  -webkit-transform: translate3d(-215px, 0, 0); /* Safari 8 */
   transform: translate3d(-215px, 0, 0);
+  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.5, 0, 0.3, 1); /* Safari 8 */
   transition: transform 0.5s cubic-bezier(0.5, 0, 0.3, 1);
 }
 
 .open {
+  -webkit-transform: translate3d(0, 0, 0); /* Safari 8 */
   transform: translate3d(0, 0, 0);
 }
 

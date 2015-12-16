@@ -387,7 +387,7 @@ $(function() {
                                  'Wikipedia</a>';
 
                   htmlString = '<blockquote>' + snippet + '</blockquote>' +
-                      '<cite class="info-window-citation">' + citation +
+                      '<cite class="info-window-citation">Source: ' + citation +
                       '</cite>';
 
                 } else {
