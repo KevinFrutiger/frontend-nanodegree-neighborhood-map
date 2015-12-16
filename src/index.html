@@ -5,15 +5,24 @@
   <title>Neighborhood Map Project</title>
   <meta name="description" content="A neighborhood map implementing an MVVM framework, a Google Map, and various other APIs.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style-small.css" media="screen and (max-width: 800px)">
+  <link rel="stylesheet" href="css/style-big.css" media="screen and (min-width: 801px)">
 </head>
 <body>
   <div id="map"></div>
   <div id="filter-menu">
-    <input id="filter-input" placeholder="Filter by name" data-bind="textInput: filterString, event: {input: filterList}">
-    <ul class="filter-menu-list" data-bind="foreach: places">
-      <li class="filter-menu-list-item" data-bind="text: name, visible: isFiltered, css: { 'selected': isSelected }, click: $root.listClick"></li>
-    </ul>
+    <div id="filter-menu-list-wrapper">
+      <input id="filter-input" placeholder="Filter by name" data-bind="textInput: filterString, event: {input: filterList}">
+      <ul class="filter-menu-list" data-bind="foreach: places">
+        <li class="filter-menu-list-item" data-bind="text: name, visible: isFiltered, css: { 'selected': isSelected }, click: $root.listClick"></li>
+      </ul>
+    </div>
+    <div id="burger-button-wrapper">
+      <div id="burger-button">
+        <div class="burger-button-div">
+        </div>
+      </button>
+    </div>
   </div>
   <script src="js/lib/jquery-2.1.4.min.js"></script>
   <script src="js/lib/knockout-3.4.0.js"></script>

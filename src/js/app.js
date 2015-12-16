@@ -9,7 +9,8 @@ $(function() {
     'Trader Joe\'s',
     'Five Guys',
     'Paris Baguette',
-    'Starbucks'
+    'Starbucks',
+    'San Bruno Mountain State Park'
   ];
 
   /**
@@ -59,7 +60,7 @@ $(function() {
 
     this.filterString = ko.observable('');
 
-    // Build observable array of Places from initial data.
+    // Sort the initial places array alphabetically.
     initialPlacesData = initialPlacesData.sort(function(a,b) {
         if (a > b) {
           return 1;
@@ -71,6 +72,7 @@ $(function() {
         return 0;
     });
 
+    // Build observable array of Places from initial data.
     this.places = ko.observableArray(initialPlacesData.map(function(name) {
         return new Place(name);
       }));
@@ -109,9 +111,6 @@ $(function() {
       });
     };
 
-
-    /* Google Map functionality */
-
     this.getPlaceFromId = function(placeId) {
       for (var i = 0, len = self.places().length; i < len; i++) {
 
@@ -120,6 +119,9 @@ $(function() {
         }
       }
     };
+
+
+    /* Google Map functionality */
 
     this.initMap = function() {
       var mapOptions = {

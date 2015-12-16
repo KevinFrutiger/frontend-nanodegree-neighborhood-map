@@ -53,18 +53,23 @@ blockquote {
   border-top: none;
 }
 
-#filter-menu {
-  background-color: rgb(241, 237, 219);
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
-  position: absolute;
-  width: 195px;
-  left: 10px;
-  top: 10px;
+#filter-menu-list-wrapper {
+  background-color: #f1eddb;
   padding: 10px 10px 0;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+  width: 195px;
+}
+
+#filter-menu {
+  display: flex;
+  align-content: flex-start;
+  position: absolute;
+/*  left: 10px;
+  top: 10px;*/
   overflow-x: hidden;
   overflow-y: auto;
-  font: Arial, sans-serif;
+  padding: 10px 20px 20px 10px; /* Right and bottom account for drop-shadow on child */
 }
 
 #filter-input {
@@ -83,4 +88,8 @@ blockquote {
 
 #info-window-content {
   width: 300px;
+}
+
+#burger-button {
+  display: none;
 }
