@@ -336,7 +336,7 @@ $(function() {
         google.maps.event.clearListeners(self.infoWindow, 'domready');
 
         self.populateInfoWindow(place);
-      })
+      });
 
       // Show the info window.
       self.infoWindow.open(self.map, marker);
