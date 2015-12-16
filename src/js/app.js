@@ -2,6 +2,14 @@ var app = {};
 
 $(function() {
 
+  // Set up UI
+  $filterMenu = $('#filter-menu');
+  $burgerButton = $('#burger-button');
+
+  $burgerButton.click(function() {
+      $filterMenu.toggleClass('open');
+  });
+
   // Initial place names from which to build the observable array for the list.
   var initialPlacesData = [
     'South San Francisco BART Station',
@@ -95,7 +103,7 @@ $(function() {
       self.refreshMarkers();
     };
 
-    this.listClick = function(place) {
+    this.listItemClick = function(place) {
       self.toggleListItemSelection(place);
 
       self.map.panTo(place.position);
@@ -103,6 +111,8 @@ $(function() {
       var marker = self.markers[place.placeId];
       self.toggleMarkerAnimation(marker);
       self.addInfoWindow(marker, place.placeId);
+
+      $('#filter-menu').removeClass('open');
     };
 
     this.toggleListItemSelection = function(place) {
@@ -350,8 +360,6 @@ $(function() {
 
   ko.applyBindings(new ViewModel());
 
-  $('#burger-button').click(function() {
-      $('#filter-menu').toggleClass('open');
-  });
+
 
 });

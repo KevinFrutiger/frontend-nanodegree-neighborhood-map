@@ -14,7 +14,7 @@
     <div id="filter-menu-list-wrapper">
       <input id="filter-input" placeholder="Filter by name" data-bind="textInput: filterString, event: {input: filterList}">
       <ul class="filter-menu-list" data-bind="foreach: places">
-        <li class="filter-menu-list-item" data-bind="text: name, visible: isFiltered, css: { 'selected': isSelected }, click: $root.listClick"></li>
+        <li class="filter-menu-list-item" data-bind="text: name, visible: isFiltered, css: { 'selected': isSelected }, click: $root.listItemClick"></li>
       </ul>
     </div>
     <div id="burger-button-wrapper">
