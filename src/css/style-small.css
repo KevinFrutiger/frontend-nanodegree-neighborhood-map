@@ -6,15 +6,19 @@ html {
 }
 
 body {
+  font-family: Arial, sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
 }
 
 blockquote {
   margin: 0;
   padding: 10px 0;
+}
+
+.info-window-content {
+  width: 300px;
 }
 
 .info-window-heading {
@@ -27,24 +31,51 @@ blockquote {
   padding: 10px 0;
 }
 
+/* TODO: Move this content into JS */;
 .info-window-citation::before {
   content: 'Source: ';
 }
 
-.filter-menu-list {
-  padding: 0;
-  margin: 0 -10px; /* Left/right margin should be negative of padding in parent */
-  border-top: 3px groove #d4d0be;
-  overflow-y: auto;
+.filter-menu {
+  align-content: flex-start;
+  box-sizing: border-box;
+  display: flex;
   height: 100%;
+  overflow: hidden;
+  position: absolute;
+  transform: translate3d(-215px, 0, 0);
+  transition: transform 0.5s cubic-bezier(0.5, 0, 0.3, 1);
+}
+
+.open {
+  transform: translate3d(0, 0, 0);
+}
+
+.filter-menu-list-wrapper {
+  background-color: #f1eddb;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+  padding: 10px 10px 0;
+  width: 215px;
+}
+
+.filter-menu-list {
+  border-top: 3px groove #d4d0be;
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0 -10px; /* Left/right margin should be negative of padding in parent */
+  overflow-y: auto;
+  padding: 0;
 }
 
 .filter-menu-list-item {
+  border-top: 1px solid #d4d0be;
+  cursor: pointer;
   list-style-type: none;
   margin: 0;
   padding: 10px;
-  border-top: 1px solid #d4d0be;
-  cursor: pointer;
 }
 
 .selected {
@@ -55,105 +86,72 @@ blockquote {
   border-top: none;
 }
 
-#filter-menu-list-wrapper {
-  background-color: #f1eddb;
-  padding: 10px 10px 0;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
-  /*border-radius: 10px;*/
-  width: 215px;
+.filter-menu-input {
   box-sizing: border-box;
-  overflow: hidden;
-  height: 100%;
-}
-
-#filter-menu {
-  box-sizing: border-box;
-  transform: translate3d(-215px, 0, 0);
-  height: 100%;
-  display: flex;
-  align-content: flex-start;
-  position: absolute;
-  /*left: 10px;
-  top: 10px;*/
-  overflow: hidden;
-  /*padding: 10px 20px 20px 10px;*/ /* Right and bottom account for drop-shadow on child */
-  transition: transform 0.5s cubic-bezier(0.5, 0, 0.3, 1);
-}
-
-#filter-menu.open {
-  transform: translate3d(0, 0, 0);
-}
-
-#filter-input {
-  width: 100%;
   margin: 0 0 10px;
-}
-
-#map {
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
-  height: 100%;
 }
 
-
-#info-window-content {
-  width: 300px;
-}
-
-#burger-button-wrapper {
-  overflow: hidden;
+.burger-button-wrapper {
   height: 70px;
-  width: 70px;
+  overflow: hidden;
   padding: 10px 10px 10px 0;
+  width: 70px;
 }
 
 /* CSS-styled burger icon inspired by burger icon on Chromecast site
    https://www.google.com/intl/en_us/chromecast/speakers/#?discover */
-#burger-button  {
+.burger-button  {
+  background: rgb(241, 237, 219);
+  border-radius: 0 10px 10px 0;
+  border: none;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
+  color: #000;
   cursor: pointer;
   display: block;
-  background: rgb(241, 237, 219);
-  border: none;
-  border-radius: 0 10px 10px 0;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
+  height: 30px;
   padding: 25px 20px 15px;
-  color: #000;
   text-align: center;
   width: 30px;
-  height: 30px;
 }
 
 /* Middle line */
 .burger-button-div {
+  background: #77787b;
   display: inline-block;
+  height: 3px;
   right: 0;
   top: 0;
-  height: 3px;
-  width: 30px;
-  background: #77787b;
   vertical-align: middle;
+  width: 30px;
 }
 
 /* Top line */
 .burger-button-div::before {
-  transform: translateY(-6px);
-  transform-origin: 17px 0;
   background: #77787b;
   content: '';
   display: block;
   height: 3px;
+  transform-origin: 17px 0;
+  transform: translateY(-6px);
   width: 30px;
 }
 
 /* Bottom line */
 .burger-button-div::after {
-  transform: translateY(3px);
-  transform-origin: 9px -1px;
   background: #77787b;
   content: '';
   display: block;
   height: 3px;
+  transform-origin: 9px -1px;
+  transform: translateY(3px);
   width: 30px;
+}
+
+#map {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }

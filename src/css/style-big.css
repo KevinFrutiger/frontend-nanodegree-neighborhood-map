@@ -3,15 +3,19 @@ html {
 }
 
 body {
+  font-family: Arial, sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
 }
 
 blockquote {
   margin: 0;
   padding: 10px 0;
+}
+
+.info-window-content {
+  width: 300px;
 }
 
 .info-window-heading {
@@ -28,18 +32,39 @@ blockquote {
   content: 'Source: ';
 }
 
+.filter-menu {
+  box-sizing: border-box;
+  align-content: flex-start;
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 10px 20px 20px 10px; /* Right and bottom account for drop-shadow on child */
+  position: absolute;
+  transition: transform 0.5s cubic-bezier(0.5, 0, 0.3, 1); /* transition when coming out of small screen CSS */
+}
+
+.filter-menu-list-wrapper {
+  box-sizing: border-box;
+  background-color: #f1eddb;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
+  padding: 10px 10px 0;
+  width: 215px;
+}
+
 .filter-menu-list {
-  padding: 0;
-  margin: 0 -10px; /* Left/right margin should be negative of padding in parent */
   border-top: 3px groove #d4d0be;
+  box-sizing: border-box;
+  margin: 0 -10px; /* Left/right margin should be negative of padding in parent */
+  padding: 0;
 }
 
 .filter-menu-list-item {
+  border-top: 1px solid #d4d0be;
+  cursor: pointer;
   list-style-type: none;
   margin: 0;
   padding: 10px;
-  border-top: 1px solid #d4d0be;
-  cursor: pointer;
 }
 
 .selected {
@@ -50,44 +75,20 @@ blockquote {
   border-top: none;
 }
 
-#filter-menu-list-wrapper {
-  background-color: #f1eddb;
-  padding: 10px 10px 0;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
-  border-radius: 10px;
-  width: 195px;
-}
-
-#filter-menu {
-  display: flex;
-  align-content: flex-start;
-  position: absolute;
-/*  left: 10px;
-  top: 10px;*/
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 10px 20px 20px 10px; /* Right and bottom account for drop-shadow on child */
-  transition: transform 0.5s cubic-bezier(0.5, 0, 0.3, 1); /* nicety when coming out of small screen CSS */
-}
-
-#filter-input {
-  width: 100%;
+.filter-menu-input {
+  box-sizing: border-box;
   margin: 0 0 10px;
+  width: 100%;
+}
+
+.burger-button {
+  display: none;
 }
 
 #map {
-  position: absolute;
+  height: 100%;
   left: 0;
+  position: absolute;
   top: 0;
   width: 100%;
-  height: 100%;
-}
-
-
-#info-window-content {
-  width: 300px;
-}
-
-#burger-button {
-  display: none;
 }

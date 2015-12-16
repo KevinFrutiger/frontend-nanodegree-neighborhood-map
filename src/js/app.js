@@ -211,7 +211,7 @@ $(function() {
       // Build nodes for info window content. In order to control the
       // width of the info window, we have to wrap the content.
       var contentElement = document.createElement('div');
-      contentElement.id = 'info-window-content';
+      contentElement.className = 'info-window-content';
 
       var infoHeaderElement = document.createElement('div');
       infoHeaderElement.className = 'info-window-heading';
