@@ -9,7 +9,10 @@
   <link rel="stylesheet" href="css/style-big.css" media="screen and (min-width: 801px)">
 </head>
 <body>
+  <!-- Google Map -->
   <div id="map"></div>
+
+  <!-- List menu -->
   <div id="filter-menu" class="filter-menu">
     <div class="filter-menu-list-wrapper">
       <input id="filter-input" class="filter-menu-input" placeholder="Filter by name" data-bind="textInput: filterString, event: {input: filterList}">
@@ -24,6 +27,7 @@
       </button>
     </div>
   </div>
+
   <script src="js/lib/jquery-2.1.4.min.js"></script>
   <script src="js/lib/knockout-3.4.0.js"></script>
   <script src="js/app.js"></script>
