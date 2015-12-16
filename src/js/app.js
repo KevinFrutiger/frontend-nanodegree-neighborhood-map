@@ -348,7 +348,10 @@ $(function() {
     };
   };
 
-
   ko.applyBindings(new ViewModel());
+
+  $('#burger-button').click(function() {
+      $('#filter-menu').toggleClass('open');
+  });
 
 });
