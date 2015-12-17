@@ -136,6 +136,9 @@ $(function() {
 
         // Reset highlighted selection.
         self.toggleListItemSelection(null);
+
+        // Reset marker
+        self.toggleMarkerSelectedState(null);
       });
 
       // Sync the markers.
@@ -156,6 +159,7 @@ $(function() {
       // Bounce the marker and open the info window.
       var marker = self.markers[place.placeId];
       self.toggleMarkerAnimation(marker);
+      self.toggleMarkerSelectedState(marker);
       self.addInfoWindow(marker, place.placeId);
 
       // On mobile, close the list. Only applies to the small screen stylesheet.
@@ -228,7 +232,8 @@ $(function() {
             placeId: placeId,
             location: location
           },
-          animation: google.maps.Animation.DROP
+          animation: google.maps.Animation.DROP,
+          icon: 'images/marker-red.png' // A copy of default Maps marker icon.
         });
 
       // Listen for clicks.
@@ -238,6 +243,7 @@ $(function() {
 
         // Bounce the marker.
         self.toggleMarkerAnimation(marker);
+        self.toggleMarkerSelectedState(marker);
 
         // Open the info window.
         self.addInfoWindow(marker, placeId);
@@ -247,6 +253,22 @@ $(function() {
       self.markers[placeId] = marker;
 
     };
+
+    /**
+     * Toggles the marker to its selected highlight state.
+     * @param {google.maps.Marker} markerToToggle - The marker to toggle.
+     */
+    this.toggleMarkerSelectedState = function(markerToToggle) {
+      for (var key in self.markers) {
+        var marker = self.markers[key];
+
+        if (marker === markerToToggle) {
+          marker.setIcon('images/marker-yellow.png');
+        } else {
+          marker.setIcon('images/marker-red.png');
+        }
+      }
+    }
 
     /**
      * Toggles the marker bounce animation on or off.
@@ -338,7 +360,7 @@ $(function() {
 
       // Update the info window when its DOM is ready.
       self.infoWindow.addListener('domready', function() {
-        // Event firest every time content is updated, so remove the listener.
+        // Event fires every time content is updated, so remove the listener.
         google.maps.event.clearListeners(self.infoWindow, 'domready');
 
         self.populateInfoWindow(place);
