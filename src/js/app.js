@@ -414,15 +414,22 @@ $(function() {
               self.$jqXHR = null;
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
+              var htmlString = '';
+
               if (textStatus == "timeout") {
-                var htmlString = '<p>Request for additional information '+
-                                 'timed out.</p>';
-
-                // Add the warning to the info window.
-                self.appendInfo(htmlString);
-
-                self.$jqXHR = null;
+                htmlString = '<p>The request for additional information '+
+                             'took too long.</p>';
+              } else {
+                htmlString = '<p>An error was encountered when trying to ' +
+                             'get addtional information <span>[' +
+                             jqXHR.statusText + ' ' + jqXHR.status +
+                             ']</span>.</p>';
               }
+
+              // Add the warning to the info window.
+              self.appendInfo(htmlString);
+
+              self.$jqXHR = null;
             })
       }
     };
