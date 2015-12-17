@@ -363,61 +363,67 @@ $(function() {
 
       } else {
 
-        // jQuery JSONP does not call an error handler. So, set a timeout.
-        var wikiRequestTimeout = setTimeout(function() {
-            console.warn('wiki request timed out');
-        }, 8000);
-
-        // Set up AJAX query and handlers.
-        var wikiUrl = 'https://en.wikipedia.org/w/api.php';
-        var settings = {
-            dataType: 'jsonp',
-            data: { // Wikipedia query fields
-                action: 'opensearch',
-                search: place.name,
-                format: 'json',
-                formatversion: 2
-            },
-            success: function(data, status, jqXHR) {
-                clearTimeout(wikiRequestTimeout);
-
-                // Build the HTML to add to the info window.
-                var htmlString = '';
-
-                // If there's a snippet...
-                if (data[2][0]) {
-                  var snippet = data[2][0];
-                  var url = data[3][0];
-
-                  var citation = '<a href="' + url + '" target="_blank">' +
-                                 'Wikipedia</a>';
-
-                  htmlString = '<blockquote>' + snippet + '</blockquote>' +
-                      '<cite class="info-window-citation">Source: ' + citation +
-                      '</cite>';
-
-                } else {
-                  htmlString = '<blockquote>No additional information ' +
-                               'available.<blockquote>';
-                }
-
-                // Add the content to the info window.
-                self.appendInfo(htmlString);
-
-                // Store this data so we don't have to requery.
-                place.wikipediaData = htmlString;
-
-                self.$jqXHR = null;
-            }
-        };
-
         // If we already have a jqXHR in progress, abort it.
         if (self.$jqXHR) {
           self.$jqXHR.abort();
         }
 
+        // Set up AJAX query.
+        var wikiUrl = 'https://en.wikipedia.org/w/api.php';
+        var settings = {
+            dataType: 'jsonp',
+            timeout: 8000,
+            data: { // Wikipedia query fields
+                action: 'opensearch',
+                search: place.name,
+                format: 'json',
+                formatversion: 2
+            }
+        };
+
         // Get the data.
-        self.$jqXHR = $.ajax(wikiUrl, settings);
+        self.$jqXHR = $.ajax(wikiUrl, settings)
+            .done(function(data, status, jqXHR) {
+
+              // Build the HTML to add to the info window.
+              var htmlString = '';
+
+              // If there's a snippet...
+              if (data[2][0]) {
+                var snippet = data[2][0];
+                var url = data[3][0];
+
+                var citation = '<a href="' + url + '" target="_blank">' +
+                               'Wikipedia</a>';
+
+                htmlString = '<blockquote>' + snippet + '</blockquote>' +
+                    '<cite class="info-window-citation">Source: ' + citation +
+                    '</cite>';
+
+              } else {
+                htmlString = '<blockquote>No additional information ' +
+                             'available.<blockquote>';
+              }
+
+              // Add the content to the info window.
+              self.appendInfo(htmlString);
+
+              // Store this data so we don't have to requery.
+              place.wikipediaData = htmlString;
+
+              self.$jqXHR = null;
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              if (textStatus == "timeout") {
+                var htmlString = '<p>Request for additional information '+
+                                 'timed out.</p>';
+
+                // Add the warning to the info window.
+                self.appendInfo(htmlString);
+
+                self.$jqXHR = null;
+              }
+            })
       }
     };
 
