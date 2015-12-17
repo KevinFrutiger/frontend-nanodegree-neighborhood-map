@@ -96,6 +96,10 @@ $(function() {
         @type {ko.observable} */
     this.filterString = ko.observable('');
 
+    /** The jqXHR object.
+        @type {jqXHR} */
+    this.$jqXHR = null;
+
     // Sort the initial places array alphabetically.
     initialPlacesData = initialPlacesData.sort(function(a,b) {
         if (a > b) {
@@ -402,11 +406,18 @@ $(function() {
 
                 // Store this data so we don't have to requery.
                 place.wikipediaData = htmlString;
+
+                self.$jqXHR = null;
             }
         };
 
+        // If we already have a jqXHR in progress, abort it.
+        if (self.$jqXHR) {
+          self.$jqXHR.abort();
+        }
+
         // Get the data.
-        $.ajax(wikiUrl, settings);
+        self.$jqXHR = $.ajax(wikiUrl, settings);
       }
     };
 
