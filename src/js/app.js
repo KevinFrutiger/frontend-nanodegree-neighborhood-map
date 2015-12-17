@@ -299,8 +299,10 @@ $(function() {
 
       var place = self.getPlaceFromId(placeId);
 
-      // Build nodes for info window content. In order to control the
-      // width of the info window, we have to wrap the content.
+      // Build nodes for info window content.
+      //
+      // To keep the width of the info window from fluctuating, we have
+      // to wrap the content and set the width in CSS.
       var contentElement = document.createElement('div');
       contentElement.className = 'info-window-content';
 
@@ -318,7 +320,7 @@ $(function() {
 
       // Create a new info window.
       var infoWindowOptions = {
-        content: contentElement
+        content: contentElement,
       };
 
       self.infoWindow = new google.maps.InfoWindow(infoWindowOptions);

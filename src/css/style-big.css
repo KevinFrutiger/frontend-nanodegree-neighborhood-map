@@ -15,6 +15,7 @@ blockquote {
 }
 
 .info-window-content {
+  overflow: auto;
   width: 300px;
 }
 
