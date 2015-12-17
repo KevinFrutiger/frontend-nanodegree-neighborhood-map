@@ -40,6 +40,7 @@ blockquote {
   -webkit-align-content: flex-start; /* Safari 8 */
   align-content: flex-start;
   box-sizing: border-box;
+  color: #fff;
   display: -webkit-flex; /* Safari 8 */
   display: flex;
   height: 100%;
@@ -57,7 +58,7 @@ blockquote {
 }
 
 .filter-menu-list-wrapper {
-  background-color: #f1eddb;
+  background-color: #775a8e;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
   box-sizing: border-box;
   height: 100%;
@@ -67,7 +68,7 @@ blockquote {
 }
 
 .filter-menu-list {
-  border-top: 3px groove #d4d0be;
+  border-top: 3px groove #b39ac6;
   box-sizing: border-box;
   height: 100%;
   margin: 0 -10px; /* Left/right margin should be negative of padding in parent */
@@ -76,7 +77,7 @@ blockquote {
 }
 
 .filter-menu-list-item {
-  border-top: 1px solid #d4d0be;
+  border-top: 1px solid #b39ac6;
   cursor: pointer;
   list-style-type: none;
   margin: 0;
@@ -107,7 +108,7 @@ blockquote {
 /* CSS-styled burger icon inspired by burger icon on Chromecast site
    https://www.google.com/intl/en_us/chromecast/speakers/#?discover */
 .burger-button  {
-  background: rgb(241, 237, 219);
+  background: #775a8e;
   border-radius: 0 10px 10px 0;
   border: none;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
@@ -122,7 +123,7 @@ blockquote {
 
 /* Middle line */
 .burger-button-div {
-  background: #77787b;
+  background: #bc93dc;
   display: inline-block;
   height: 3px;
   right: 0;
@@ -133,7 +134,7 @@ blockquote {
 
 /* Top line */
 .burger-button-div::before {
-  background: #77787b;
+  background: #bc93dc;
   content: '';
   display: block;
   height: 3px;
@@ -144,7 +145,7 @@ blockquote {
 
 /* Bottom line */
 .burger-button-div::after {
-  background: #77787b;
+  background: #bc93dc;
   content: '';
   display: block;
   height: 3px;
