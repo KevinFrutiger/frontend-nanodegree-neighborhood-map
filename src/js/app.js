@@ -105,7 +105,7 @@ $(function() {
     this.markerIcons = {
       NORMAL: 'images/marker-red.png',
       SELECTED: 'images/marker-yellow.png'
-    }
+    };
 
     // Sort the initial places array alphabetically.
     initialPlacesData = initialPlacesData.sort(function(a,b) {
@@ -276,7 +276,7 @@ $(function() {
           marker.setIcon(self.markerIcons.NORMAL);
         }
       }
-    }
+    };
 
     /**
      * Toggles the marker bounce animation on or off.
@@ -460,7 +460,7 @@ $(function() {
               self.appendInfo(htmlString);
 
               self.$jqXHR = null;
-            })
+            });
       }
     };
 
