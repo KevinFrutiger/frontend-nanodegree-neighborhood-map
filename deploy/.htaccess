@@ -1,0 +1,17 @@
+AddOutputFilterByType DEFLATE text/text text/plain text/html text/xml text/css application/x-javascript application/javascript application/json image/svg+xml
+
+<IfModule mod_expires.c>
+    # Activate mod_expires for this directory
+    ExpiresActive on
+
+    # locally cache common image types for 7 days
+    ExpiresByType text/html "access plus 7 days"
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType application/json "access plus 7 days"
+    ExpiresByType image/jpg "access plus 7 days"
+    ExpiresByType image/jpeg "access plus 7 days"
+    ExpiresByType image/gif "access plus 7 days"
+    ExpiresByType image/png "access plus 7 days"
+    ExpiresByType image/svg+xml "access plus 7 days"
+</IfModule>

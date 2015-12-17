@@ -59,16 +59,16 @@ module.exports = function(grunt) {
     //   }
     // },
 
-    imagemin: {
-      main: {
-        files: [{
-          expand: true,
-          cwd: 'src/images/',
-          src: ['**/*.{png,jpg,gif,svg}'],
-          dest: 'deploy/images/'
-        }]
-      }
-    },
+    // imagemin: {
+    //   main: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: 'src/images/',
+    //       src: ['**/*.{png,jpg,gif,svg}'],
+    //       dest: 'deploy/images/'
+    //     }]
+    //   }
+    // },
 
     uglify: {
       options: {
@@ -98,16 +98,7 @@ module.exports = function(grunt) {
           dest: 'deploy/',
           dot: true
         }]
-      },
-
-      // views: {
-      //   files: [{
-      //     expand: true,
-      //     cwd: 'src/views',
-      //     src: ['**/*'],
-      //     dest: 'deploy/views'
-      //   }]
-      // }
+      }
     },
 
 
@@ -115,7 +106,6 @@ module.exports = function(grunt) {
 
     jshint: {
       main: ['src/js/*.js']
-      //views: ['src/views/js/*.js']
     },
 
     // pagespeed: {
@@ -138,16 +128,17 @@ module.exports = function(grunt) {
     // }
   });
 
-  //grunt.loadNpmTasks('grunt-contrib-clean');
-  //grunt.loadNpmTasks('grunt-contrib-copy');
-  //grunt.loadNpmTasks('grunt-contrib-cssmin');
-  //grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
   //grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  //grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   //grunt.loadNpmTasks('grunt-pagespeed');
   //grunt.loadNpmTasks('grunt-replace');
 
   //grunt.registerTask('build', ['clean:build', 'htmlmin', 'cssmin', 'imagemin', 'jshint', 'uglify', 'copy', 'replace', 'clean:inlinedcss']);
+  grunt.registerTask('build', ['jshint', 'clean:build', 'htmlmin', 'cssmin', 'uglify', 'copy']);
 
 };
