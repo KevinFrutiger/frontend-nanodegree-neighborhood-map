@@ -136,15 +136,16 @@ $(function() {
         self.infoWindow = null;
       }
 
+      var re = new RegExp(self.filterString(), 'ig');
+
       self.places().forEach(function(place) {
         // Set whether place should show in filtered results.
-        var re = new RegExp(self.filterString(), 'ig');
         place.isFiltered(re.test(place.name));
 
         // Reset highlighted selection.
         self.toggleListItemSelection(null);
 
-        // Reset marker
+        // Reset marker state
         self.toggleMarkerSelectedState(null);
       });
 
