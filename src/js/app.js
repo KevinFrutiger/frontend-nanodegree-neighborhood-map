@@ -100,6 +100,13 @@ $(function() {
         @type {jqXHR} */
     this.$jqXHR = null;
 
+    /** The image URLs for various marker states.
+        @enum {string} */
+    this.markerIcons = {
+      NORMAL: 'images/marker-red.png',
+      SELECTED: 'images/marker-yellow.png'
+    }
+
     // Sort the initial places array alphabetically.
     initialPlacesData = initialPlacesData.sort(function(a,b) {
         if (a > b) {
@@ -233,7 +240,7 @@ $(function() {
             location: location
           },
           animation: google.maps.Animation.DROP,
-          icon: 'images/marker-red.png' // A copy of default Maps marker icon.
+          icon: self.markerIcons.NORMAL // A copy of default Maps marker icon.
         });
 
       // Listen for clicks.
@@ -263,9 +270,9 @@ $(function() {
         var marker = self.markers[key];
 
         if (marker === markerToToggle) {
-          marker.setIcon('images/marker-yellow.png');
+          marker.setIcon(self.markerIcons.SELECTED);
         } else {
-          marker.setIcon('images/marker-red.png');
+          marker.setIcon(self.markerIcons.NORMAL);
         }
       }
     }
