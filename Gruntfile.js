@@ -8,9 +8,9 @@ module.exports = function(grunt) {
       build: {
         src: ['deploy/*']
       },
-      // inlinedcss: { // Used to clean out stylesheets that are now in <style>
-      //   src: ['deploy/css/style.css']
-      // }
+      inlinedcss: { // Used to clean out stylesheets that are now in <style>
+        src: ['deploy/css/style-small.css']
+      }
     },
 
     htmlmin: {
@@ -42,33 +42,35 @@ module.exports = function(grunt) {
       }
     },
 
-    // replace: {
-    //   dist: {
-    //     options: {
-    //       patterns: [{
-    //         match: /<link href=\"css\/style.css\" rel=\"stylesheet\">/g,
-    //         replacement: '<style>' + '<%= grunt.file.read("deploy/css/style.css") %>' + '</style>'
-    //       }]
-    //     },
-    //     files: [{
-    //       expand: true,
-    //       cwd: 'deploy/',
-    //       src: ['index.html'],
-    //       dest: 'deploy/'
-    //     }]
-    //   }
-    // },
+    replace: {
+      dist: {
+        options: {
+          patterns: [{
+            match: /<link rel=\"stylesheet\" href=\"css\/style-small.css\" media=\"screen and \(max-width: 800px\)\">/g,
+            replacement: '<style>@media screen and (max-width: 800px) {' +
+                         '<%= grunt.file.read("deploy/css/style-small.css") %>' +
+                         '}</style>'
+          }]
+        },
+        files: [{
+          expand: true,
+          cwd: 'deploy/',
+          src: ['index.html'],
+          dest: 'deploy/'
+        }]
+      }
+    },
 
-    // imagemin: {
-    //   main: {
-    //     files: [{
-    //       expand: true,
-    //       cwd: 'src/images/',
-    //       src: ['**/*.{png,jpg,gif,svg}'],
-    //       dest: 'deploy/images/'
-    //     }]
-    //   }
-    // },
+    imagemin: {
+      main: {
+        files: [{
+          expand: true,
+          cwd: 'src/images/',
+          src: ['**/*.{png,jpg,gif,svg}'],
+          dest: 'deploy/images/'
+        }]
+      }
+    },
 
     uglify: {
       options: {
@@ -108,37 +110,36 @@ module.exports = function(grunt) {
       main: ['src/js/*.js']
     },
 
-    // pagespeed: {
-    //   options: {
-    //     nokey: true,
-    //     url: "https://kevinfrutiger.github.io/frontend-nanodegree-web-optimization/",
-    //     locale: "en_US",
-    //     threshold: 90
-    //   },
-    //   desktop: {
-    //     options: {
-    //       strategy: "desktop"
-    //     }
-    //   },
-    //   mobile: {
-    //     options: {
-    //       strategy: "mobile"
-    //     }
-    //   }
-    // }
+    pagespeed: {
+      options: {
+        nokey: true,
+        url: "http://test.frutigergroup.com/udacity/project5/deploy",
+        locale: "en_US",
+        threshold: 90
+      },
+      desktop: {
+        options: {
+          strategy: "desktop"
+        }
+      },
+      mobile: {
+        options: {
+          strategy: "mobile"
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
-  //grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  //grunt.loadNpmTasks('grunt-pagespeed');
-  //grunt.loadNpmTasks('grunt-replace');
+  grunt.loadNpmTasks('grunt-pagespeed');
+  grunt.loadNpmTasks('grunt-replace');
 
-  //grunt.registerTask('build', ['clean:build', 'htmlmin', 'cssmin', 'imagemin', 'jshint', 'uglify', 'copy', 'replace', 'clean:inlinedcss']);
-  grunt.registerTask('build', ['jshint', 'clean:build', 'htmlmin', 'cssmin', 'uglify', 'copy']);
+  grunt.registerTask('build', ['jshint', 'clean:build', 'htmlmin', 'cssmin', 'imagemin', 'uglify', 'copy', 'replace', 'clean:inlinedcss']);
 
 };
