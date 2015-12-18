@@ -70,6 +70,7 @@ h1 {
   display: flex;
   height: 100%;
   overflow: hidden;
+  pointer-events: none; /* Let mouse events go through transparent area under burger icon. */
   position: absolute;
   -webkit-transform: translate3d(-215px, 0, 0); /* Safari 8 */
   transform: translate3d(-215px, 0, 0);
@@ -93,6 +94,7 @@ h1 {
   height: 100%;
   overflow: hidden;
   padding: 10px 10px 0;
+  pointer-events: auto; /* Re-enable pointer-events since it is 'none' on parent. */
   width: 215px;
 }
 
@@ -134,6 +136,7 @@ h1 {
   height: 70px;
   overflow: hidden;
   padding: 0 10px 10px 0;
+  pointer-events: auto; /* Re-enable pointer-events since it is 'none' on parent. */
   width: 70px; /* Adjust padding on header if you change this. */
 }
 

@@ -12,9 +12,9 @@ $(function() {
     'South San Francisco BART Station',
     'See\'s Candies',
     'Trader Joe\'s',
-    'Five Guys',
+    'Best Buy',
     'Paris Baguette',
-    'Starbucks',
+    'Lidia\'s Deli',
     'San Bruno Mountain State Park'
   ];
 
