@@ -111,8 +111,21 @@ $(function() {
         @type {jQuery} */
     this.$burgerIcon = $('.burger-button-div');
 
+    /** The map bounds. Used to recenter and zoom to fit all the markers.
+        @type {google.maps.LatLngBounds} */
+    this.mapBounds = null;
+
     this.$burgerButton.click(function() {
         self.toggleFilterMenuOpen();
+    });
+
+    $(window).resize(function() {
+      // Make sure all markers fit in view when resized.
+      // Per API, manually triggering resize event so the map to know its
+      // div was resized.
+      google.maps.event.trigger(self.map, 'resize');
+      self.map.fitBounds(self.mapBounds);
+      self.map.setCenter(self.mapBounds.getCenter());
     });
 
     // Sort the initial places array alphabetically.
@@ -224,15 +237,19 @@ $(function() {
     };
 
 
-    /* Google Map functionality */
+    /*### Google Map functionality ###*/
 
     /**
      * Initializes the Google Map and the Places Service.
      */
     this.initMap = function() {
+      // Note: After markers added, map bounds are rest which changes the zoom.
+      // Since zoom is required here, setting to a wider view to give sense of
+      // overall location before map redraws. And it makes it look intentional
+      // versus a glitch if the zoom is close to the final zoom.
       var mapOptions = {
         center: {lat: 37.6640317, lng: -122.445706},
-        zoom: 14,
+        zoom: 11,
         zoomControl: true,
         zoomControlOptions: {
           position: google.maps.ControlPosition.RIGHT_CENTER
@@ -249,12 +266,62 @@ $(function() {
       // Initialize the Places service.
       self.placesService = new google.maps.places.PlacesService(self.map);
 
+      // Create map bounds to extend as we add markers.
+      self.mapBounds = new google.maps.LatLngBounds();
+
       // Place the markers.
       self.refreshMarkers();
     };
 
     // Make this function accessible as the Map load callback.
     app.initMap = this.initMap;
+
+    /**
+     * Adds/shows the markers on the map for Places in the filtered list.
+     */
+    this.refreshMarkers = function() {
+
+      // For each Place, create/show/hide a marker.
+      self.places().forEach(function(place) {
+
+          // If there's no placeId, we haven't created a marker for this
+          // place yet.
+          if (!place.placeId) {
+            // Set up request object for the Places Service.
+            var request = {
+              location: self.map.getCenter(),
+              radius: '500',
+              query: place.name
+            };
+
+            // Query the Places API.
+            self.placesService.textSearch(request, function(results, status) {
+              if (status == google.maps.places.PlacesServiceStatus.OK) {
+                // Add a marker to the map.
+                self.addMarker(results[0].place_id,
+                               results[0].geometry.location);
+
+                // Store data to our Places object so we don't have to requery.
+                place.placeId = results[0].place_id;
+                place.position = results[0].geometry.location;
+                place.types = results[0].types;
+              }
+            });
+          } else { // We have a marker for this place already.
+
+            // Get the marker for this place.
+            var marker = self.markers[place.placeId];
+
+            // Show/hide based on whether place is in the filtered list.
+            marker.setVisible(place.isFiltered());
+
+            // Stop any bouncing markers.
+            if (marker.getAnimation() !== null) {
+              marker.setAnimation(null);
+            }
+          }
+      });
+    };
 
     /**
      * Adds a marker to the map and sets up listeners.
@@ -290,6 +357,13 @@ $(function() {
 
       // Store a reference to this marker.
       self.markers[placeId] = marker;
+
+      // Add this markers LatLng to the extents of the map bounds and recenter.
+      self.mapBounds.extend(location);
+      self.map.fitBounds(self.mapBounds);
+      self.map.setCenter(self.mapBounds.getCenter());
+      // TODO: Move fit and center out of here and track status of adding all
+      // markers so we can fit and center once.
 
     };
 
@@ -518,53 +592,6 @@ $(function() {
 
       // Update the info window with the updated node.
       self.infoWindow.setContent(infoElement);
-    };
-
-    /**
-     * Adds/shows the markers on the map for Places in the filtered list.
-     */
-    this.refreshMarkers = function() {
-
-      // For each Place, create/show/hide a marker.
-      self.places().forEach(function(place) {
-
-          // If there's no placeId, we haven't created a marker for this
-          // place yet.
-          if (!place.placeId) {
-            // Set up request object for the Places Service.
-            var request = {
-              location: self.map.getCenter(),
-              radius: '500',
-              query: place.name
-            };
-
-            // Query the Places API.
-            self.placesService.textSearch(request, function(results, status) {
-              if (status == google.maps.places.PlacesServiceStatus.OK) {
-                // Add a marker to the map.
-                self.addMarker(results[0].place_id,
-                               results[0].geometry.location);
-
-                // Store data to our Places object so we don't have to requery.
-                place.placeId = results[0].place_id;
-                place.position = results[0].geometry.location;
-                place.types = results[0].types;
-              }
-            });
-          } else { // We have a marker for this place already.
-
-            // Get the marker for this place.
-            var marker = self.markers[place.placeId];
-
-            // Show/hide based on whether place is in the filtered list.
-            marker.setVisible(place.isFiltered());
-
-            // Stop any bouncing markers.
-            if (marker.getAnimation() !== null) {
-              marker.setAnimation(null);
-            }
-          }
-      });
     };
   };
 
