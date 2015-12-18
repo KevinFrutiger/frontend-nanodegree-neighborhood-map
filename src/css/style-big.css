@@ -10,13 +10,36 @@ body {
 }
 
 h1 {
+  background: #634d76;
+  color: #fff;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
   font-size: 1.125rem;
-  margin: 5px 0 15px;
+  font-weight: bold;
+  margin: 0;
+  padding: 10px 20px; /* Left should account for width of burger button on overlay. */
+  text-align: center;
 }
 
 blockquote {
   margin: 0;
   padding: 10px 0;
+}
+
+#map {
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.content {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+  position: absolute;
+  width: 100%;
 }
 
 .info-window-content {
@@ -94,12 +117,4 @@ blockquote {
 
 .burger-button {
   display: none;
-}
-
-#map {
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
 }

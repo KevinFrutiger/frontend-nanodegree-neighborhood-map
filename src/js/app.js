@@ -233,8 +233,13 @@ $(function() {
       var mapOptions = {
         center: {lat: 37.6640317, lng: -122.445706},
         zoom: 14,
+        zoomControl: true,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_CENTER
+        },
+        mapTypeControl: true,
         mapTypeControlOptions: {
-          position: google.maps.ControlPosition.TOP_RIGHT
+          position: google.maps.ControlPosition.RIGHT_BOTTOM
         },
         streetViewControl: false
       };

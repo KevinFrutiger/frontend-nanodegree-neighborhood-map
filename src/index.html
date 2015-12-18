@@ -9,13 +9,16 @@
   <link rel="stylesheet" href="css/style-big.css" media="screen and (min-width: 801px)">
 </head>
 <body>
-  <!-- Google Map -->
-  <div id="map"></div>
+  <div class="content">
+    <h1>Some Places™</h1>
+    <!-- Google Map -->
+    <div id="map"></div>
+  </div>
 
-  <!-- List menu -->
+  <!-- List menu overlay -->
   <div id="filter-menu" class="filter-menu">
     <div class="filter-menu-list-wrapper">
-      <h1>Some Places™ around South San Francisco</h1>
+      <!-- <h1>Some Places™ around South San Francisco</h1> -->
       <input id="filter-input" class="filter-menu-input" placeholder="Filter by name" data-bind="textInput: filterString, event: {input: filterList}">
       <ul class="filter-menu-list" data-bind="foreach: places">
         <li class="filter-menu-list-item" data-bind="text: name, visible: isFiltered, css: { 'selected': isSelected }, click: $root.listItemClick"></li>

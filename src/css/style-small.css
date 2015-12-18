@@ -12,14 +12,37 @@ body {
   padding: 0;
 }
 
-h1 {
-  font-size: 1.125rem;
-  flex-shrink: 0;
-}
-
 blockquote {
   margin: 0;
   padding: 10px 0;
+}
+
+h1 {
+  background: #634d76;
+  color: #fff;
+  -webkit-flex-shrink: 0; /* Safari 8 */
+  flex-shrink: 0;
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 10px 20px 10px 70px; /* Left should account for width of burger button on overlay. */
+  text-align: center;
+}
+
+#map {
+  -webkit-flex-grow: 1; /* Safari 8 */
+  flex-grow: 1;
+  width: 100%;
+}
+
+.content {
+  display: -webkit-flex; /* Safari 8 */
+  display: flex;
+  -webkit-flex-direction: column; /* Safari 8 */
+  flex-direction: column;
+  height: 100%;
+  position: absolute;
+  width: 100%;
 }
 
 .info-window-content {
@@ -100,23 +123,25 @@ blockquote {
 
 .filter-menu-input {
   box-sizing: border-box;
-  margin: 0 0 10px;
-  width: 100%;
+  -webkit-flex-shrink: 0;
   flex-shrink: 0;
+  margin: 10px 0 10px;
+  padding: 5px;
+  width: 100%;
 }
 
 .burger-button-wrapper {
   height: 70px;
   overflow: hidden;
-  padding: 10px 10px 10px 0;
-  width: 70px;
+  padding: 0 10px 10px 0;
+  width: 70px; /* Adjust padding on header if you change this. */
 }
 
 /* CSS-styled burger icon drived from burger icon on Chromecast site
    https://www.google.com/intl/en_us/chromecast/speakers/#?discover */
 .burger-button  {
   background: #775a8e;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 0 10px 0;
   border: none;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.35);
   color: #000;
@@ -182,12 +207,4 @@ blockquote {
 .burger-button-div.open::after {
   -webkit-transform: rotate3d(0, 0, 1, -45deg); /* Safari 8 */
   transform: rotate3d(0, 0, 1, -45deg);
-}
-
-#map {
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
 }
