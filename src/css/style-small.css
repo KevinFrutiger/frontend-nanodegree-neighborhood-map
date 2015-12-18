@@ -24,7 +24,8 @@ blockquote {
 
 .info-window-content {
   overflow: auto;
-  width: 300px;
+  max-width: 300px;
+  width: 50vw;
 }
 
 .info-window-heading {
