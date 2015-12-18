@@ -99,9 +99,16 @@ $(function() {
       SELECTED: 'images/marker-yellow.png'
     };
 
-    // Set up UI
+    /** The filter menu.
+        @type {jQuery} */
     this.$filterMenu = $('#filter-menu');
+
+    /** The burger button for the filter menu.
+        @type {jQuery} */
     this.$burgerButton = $('#burger-button');
+
+    /** The burger icon of the burger button.
+        @type {jQuery} */
     this.$burgerIcon = $('.burger-button-div');
 
     this.$burgerButton.click(function() {
