@@ -6,14 +6,6 @@ var app = {};
 
 $(function() {
 
-  // Set up UI
-  $filterMenu = $('#filter-menu');
-  $burgerButton = $('#burger-button');
-
-  $burgerButton.click(function() {
-      $filterMenu.toggleClass('open');
-  });
-
   // Initial place names from which to build the observable array for the list.
   // These names need to correlate with a place on Google Maps.
   var initialPlacesData = [
@@ -107,6 +99,15 @@ $(function() {
       SELECTED: 'images/marker-yellow.png'
     };
 
+    // Set up UI
+    this.$filterMenu = $('#filter-menu');
+    this.$burgerButton = $('#burger-button');
+    this.$burgerIcon = $('.burger-button-div');
+
+    this.$burgerButton.click(function() {
+        self.toggleFilterMenuOpen();
+    });
+
     // Sort the initial places array alphabetically.
     initialPlacesData = initialPlacesData.sort(function(a,b) {
         if (a > b) {
@@ -171,7 +172,25 @@ $(function() {
       self.addInfoWindow(marker, place.placeId);
 
       // On mobile, close the list. Only applies to the small screen stylesheet.
-      $('#filter-menu').removeClass('open');
+      self.toggleFilterMenuOpen('closed');
+    };
+
+    /**
+     * Toggles the filter menu open and closed.
+     * @param {string} [desiredState=null] The desired state, "open" or "closed".
+     *     If no value is provided, it's toggled to the other state.
+     */
+    this.toggleFilterMenuOpen = function(desiredState) {
+      if (desiredState == 'closed') {
+        self.$filterMenu.removeClass('open');
+        self.$burgerIcon.removeClass('open');
+      } else if (desiredState === 'open') {
+        self.$filterMenu.addClass('open');
+        self.$burgerIcon.addClass('open'); // Set burger icon to an 'x'
+      } else {
+        self.$filterMenu.toggleClass('open');
+        self.$burgerIcon.toggleClass('open'); // Set burger icon to an 'x'
+      }
     };
 
     /**

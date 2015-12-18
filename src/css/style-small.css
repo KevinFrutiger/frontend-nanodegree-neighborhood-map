@@ -111,7 +111,7 @@ blockquote {
   width: 70px;
 }
 
-/* CSS-styled burger icon inspired by burger icon on Chromecast site
+/* CSS-styled burger icon drived from burger icon on Chromecast site
    https://www.google.com/intl/en_us/chromecast/speakers/#?discover */
 .burger-button  {
   background: #775a8e;
@@ -134,8 +134,13 @@ blockquote {
   height: 3px;
   right: 0;
   top: 0;
+  transition: background 0.5s ease;
   vertical-align: middle;
   width: 30px;
+}
+
+.burger-button-div.open {
+  background: transparent;
 }
 
 /* Top line */
@@ -144,9 +149,18 @@ blockquote {
   content: '';
   display: block;
   height: 3px;
+  -webkit-transform-origin: 17px 0;
   transform-origin: 17px 0;
+  -webkit-transform: translateY(-6px);
   transform: translateY(-6px);
+  -webkit-transition: transform 0.5s;
+  transition: transform 0.5s;
   width: 30px;
+}
+
+.burger-button-div.open::before {
+  -webkit-transform: rotate3d(0, 0, 1, 45deg);
+  transform: rotate3d(0, 0, 1, 45deg);
 }
 
 /* Bottom line */
@@ -155,9 +169,18 @@ blockquote {
   content: '';
   display: block;
   height: 3px;
+  -webkit-transform-origin: 9px -1px; /* Safari 8 */
   transform-origin: 9px -1px;
+  -webkit-transform: translateY(3px); /* Safari 8 */
   transform: translateY(3px);
+  -webkit-transition: -webkit-transform 0.5s; /* Safari 8 */
+  transition: transform 0.5s;
   width: 30px;
+}
+
+.burger-button-div.open::after {
+  -webkit-transform: rotate3d(0, 0, 1, -45deg); /* Safari 8 */
+  transform: rotate3d(0, 0, 1, -45deg);
 }
 
 #map {
