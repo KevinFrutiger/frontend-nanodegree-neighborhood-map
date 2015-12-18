@@ -239,7 +239,7 @@ $(function() {
         },
         mapTypeControl: true,
         mapTypeControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_BOTTOM
+          position: google.maps.ControlPosition.RIGHT_TOP
         },
         streetViewControl: false
       };
