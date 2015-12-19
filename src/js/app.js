@@ -461,7 +461,7 @@ $(function() {
 
       // Create a new info window.
       var infoWindowOptions = {
-        content: contentElement,
+        content: contentElement
       };
 
       self.infoWindow = new google.maps.InfoWindow(infoWindowOptions);
