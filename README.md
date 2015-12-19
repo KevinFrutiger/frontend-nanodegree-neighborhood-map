@@ -4,7 +4,7 @@ This was the fifth project in the Udacity Front-End Nanodegree. The objective wa
 
 ## Running the application
 
-You can run the application [here](https://github.com/KevinFrutiger/frontend-nanodegree-neighborhood-map).
+You can run the application [here](https://kevinfrutiger.github.io/frontend-nanodegree-neighborhood-map/).
 
 ### Filter the map results
 
