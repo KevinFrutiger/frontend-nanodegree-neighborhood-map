@@ -115,11 +115,6 @@ $(function() {
         @type {google.maps.LatLngBounds} */
     this.mapBounds = null;
 
-    // Set up UI listeners
-    this.$burgerButton.click(function() {
-        self.toggleFilterMenuOpen();
-    });
-
     // Sort the initial places array alphabetically.
     initialPlacesData = initialPlacesData.sort(function(a,b) {
         if (a > b) {
@@ -137,6 +132,14 @@ $(function() {
     this.places = ko.observableArray(initialPlacesData.map(function(name) {
         return new Place(name);
       }));
+
+
+    /**
+     * Handles click for menu button. Toggles the menu open/closed.
+     */
+    this.burgerButtonClick = function() {
+        self.toggleFilterMenuOpen();
+    };
 
     /**
      * Filters the list and calls to refresh markers.
