@@ -113,7 +113,7 @@ module.exports = function(grunt) {
     pagespeed: {
       options: {
         nokey: true,
-        url: "http://test.frutigergroup.com/udacity/project5/deploy",
+        url: "https://kevinfrutiger.github.io/frontend-nanodegree-neighborhood-map/",
         locale: "en_US",
         threshold: 90
       },
