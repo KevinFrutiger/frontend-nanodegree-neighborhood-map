@@ -120,15 +120,6 @@ $(function() {
         self.toggleFilterMenuOpen();
     });
 
-    $(window).resize(function() {
-      // Make sure all markers fit in view when resized.
-      // Per API, manually triggering resize event so the map to know its
-      // div was resized.
-      google.maps.event.trigger(self.map, 'resize');
-      self.map.fitBounds(self.mapBounds);
-      self.map.setCenter(self.mapBounds.getCenter());
-    });
-
     // Sort the initial places array alphabetically.
     initialPlacesData = initialPlacesData.sort(function(a,b) {
         if (a > b) {
@@ -597,7 +588,24 @@ $(function() {
     };
   };
 
-  // Bind the ViewModel.
+
+
+  /*## KO bindings ##*/
+
+  // Bind window resize to refit map.
+  ko.bindingHandlers.refitMapOnWinResize = {
+    init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+      var handler = function() {
+          google.maps.event.trigger(viewModel.map, 'resize');
+          viewModel.map.fitBounds(viewModel.mapBounds);
+          viewModel.map.setCenter(viewModel.mapBounds.getCenter());
+      };
+
+      $(window).resize(handler);
+    }
+  };
+
+
   ko.applyBindings(new ViewModel());
 
 });
