@@ -22,7 +22,7 @@ $(function() {
    * Creates a Place object.
    * @class
    * @param {string} name - Name of location, to be used in search
-   * on Places service.
+   *     on Places service.
    */
   var Place = function(name) {
     /**
@@ -40,8 +40,8 @@ $(function() {
         @type {Array.<strings>} */
     this.types = null;
 
-    /** Lat-Long position. {Lat: val, Lng: val}
-        @type {Object} */
+    /** Lat-Long position.
+        @type {google.maps.LatLng} */
     this.position = null;
 
     /** Whether the Place is included in filtered results.
@@ -115,6 +115,7 @@ $(function() {
         @type {google.maps.LatLngBounds} */
     this.mapBounds = null;
 
+    // Set up UI listeners
     this.$burgerButton.click(function() {
         self.toggleFilterMenuOpen();
     });
@@ -215,7 +216,7 @@ $(function() {
 
     /**
      * Flags the currently selected place for KO.
-     * @param {Place} place - The correspanding Place that was clicked.
+     * @param {Place} place - The corresponding Place that was clicked.
      */
     this.toggleListItemSelection = function(place) {
       self.places().forEach(function(currentPlace) {
@@ -243,10 +244,11 @@ $(function() {
      * Initializes the Google Map and the Places Service.
      */
     this.initMap = function() {
-      // Note: After markers added, map bounds are rest which changes the zoom.
+      // Note: After markers added, map bounds are reset which changes the zoom.
       // Since zoom is required here, setting to a wider view to give sense of
       // overall location before map redraws. And it makes it look intentional
       // versus a glitch if the zoom is close to the final zoom.
+      //
       var mapOptions = {
         center: {lat: 37.6640317, lng: -122.445706},
         zoom: 11,
@@ -339,7 +341,7 @@ $(function() {
             location: location
           },
           animation: google.maps.Animation.DROP,
-          icon: self.markerIcons.NORMAL // A copy of default Maps marker icon.
+          icon: self.markerIcons.NORMAL
         });
 
       // Listen for clicks.
@@ -358,7 +360,7 @@ $(function() {
       // Store a reference to this marker.
       self.markers[placeId] = marker;
 
-      // Add this markers LatLng to the extents of the map bounds and recenter.
+      // Add this marker's LatLng to the extents of the map bounds and recenter.
       self.mapBounds.extend(location);
       self.map.fitBounds(self.mapBounds);
       self.map.setCenter(self.mapBounds.getCenter());
@@ -385,7 +387,7 @@ $(function() {
 
     /**
      * Toggles the marker bounce animation on or off.
-     * @param {google.maps.Marker} markerToAnimate - The marker animate/stop.
+     * @param {google.maps.Marker} markerToAnimate - The marker to animate/stop.
      */
     this.toggleMarkerAnimation = function(markerToAnimate) {
       // Loop through all markers and set their animation state.
@@ -411,7 +413,7 @@ $(function() {
     };
 
     /**
-     * Returns a function for the setTimeout callback to set the animation
+     * Returns a function for the setTimeout callback to stop the animation
      * for the marker.
      * @param {google.maps.Marker} currentMaker - The marker to stop.
      * @returns {function}
@@ -441,7 +443,7 @@ $(function() {
       // Build nodes for info window content.
       //
       // To keep the width of the info window from fluctuating, we have
-      // to wrap the content and set the width in CSS.
+      // to wrap the content and set the width in stylesheet.
       var contentElement = document.createElement('div');
       contentElement.className = 'info-window-content';
 
