@@ -127,6 +127,7 @@ h1 {
   box-sizing: border-box;
   -webkit-flex-shrink: 0;
   flex-shrink: 0;
+  font-size: 1rem; /* 16px or higher prevents input zoom lock on iPhone */
   margin: 10px 0 10px;
   padding: 5px;
   width: 100%;
