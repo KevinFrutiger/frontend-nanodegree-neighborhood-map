@@ -17,7 +17,7 @@ h1 {
   font-size: 1.125rem;
   font-weight: bold;
   margin: 0;
-  padding: 10px 20px; /* Left should account for width of burger button on overlay. */
+  padding: 10px 20px;
   text-align: center;
 }
 
