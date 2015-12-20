@@ -1,8 +1,9 @@
 // Global object for any needed external references.
 var app = {};
 
-// Note: JSDoc format comments used, but since these are wrapped in a closure
-// they can't actually generate JSDocs.
+// TODO: Prefix observables with "o" or something to more easily
+// differentiate them from methods.
+// TODO: See if it's cleaner to store markers in the places observable.
 
 $(function() {
 
@@ -99,17 +100,9 @@ $(function() {
       SELECTED: 'images/marker-yellow.png'
     };
 
-    /** The filter menu.
-        @type {jQuery} */
-    this.$filterMenu = $('#filter-menu');
-
-    /** The burger button for the filter menu.
-        @type {jQuery} */
-    this.$burgerButton = $('#burger-button');
-
-    /** The burger icon of the burger button.
-        @type {jQuery} */
-    this.$burgerIcon = $('.burger-button-div');
+    /** Whether the menu should be open.
+        @type {ko.observable} */
+    this.menuIsOpen = ko.observable(false);
 
     /** The map bounds. Used to recenter and zoom to fit all the markers.
         @type {google.maps.LatLngBounds} */
@@ -132,14 +125,6 @@ $(function() {
     this.places = ko.observableArray(initialPlacesData.map(function(name) {
         return new Place(name);
       }));
-
-
-    /**
-     * Handles click for menu button. Toggles the menu open/closed.
-     */
-    this.burgerButtonClick = function() {
-        self.toggleFilterMenuOpen();
-    };
 
     /**
      * Filters the list and calls to refresh markers.
@@ -192,19 +177,15 @@ $(function() {
 
     /**
      * Toggles the filter menu open and closed.
-     * @param {string} [desiredState=null] The desired state, "open" or "closed".
+     * @param {string} [desiredState=null] The desired state, 'open' or 'closed'.
      *     If no value is provided, it's toggled to the other state.
      */
     this.toggleFilterMenuOpen = function(desiredState) {
-      if (desiredState == 'closed') {
-        self.$filterMenu.removeClass('open');
-        self.$burgerIcon.removeClass('open');
-      } else if (desiredState === 'open') {
-        self.$filterMenu.addClass('open');
-        self.$burgerIcon.addClass('open'); // Set burger icon to an 'x'
+      // If the desired state is closed or it should toggle to close.
+      if (desiredState === 'closed' || self.menuIsOpen()) {
+        self.menuIsOpen(false); // Close the menu.
       } else {
-        self.$filterMenu.toggleClass('open');
-        self.$burgerIcon.toggleClass('open'); // Set burger icon to an 'x'
+        self.menuIsOpen(true); // Open the menu.
       }
     };
 

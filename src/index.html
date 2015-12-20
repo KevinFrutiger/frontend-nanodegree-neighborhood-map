@@ -19,18 +19,16 @@
   </div>
 
   <!-- List menu overlay -->
-  <div id="filter-menu" class="filter-menu">
+  <div id="filter-menu" class="filter-menu" data-bind="css: {open: menuIsOpen}">
     <div class="filter-menu-list-wrapper">
-      <!-- <h1>Some Places™ around South San Francisco</h1> -->
       <input id="filter-input" class="filter-menu-input" placeholder="Filter by name" data-bind="textInput: filterString, event: {input: filterList}">
       <ul class="filter-menu-list" data-bind="foreach: places">
         <li class="filter-menu-list-item" data-bind="text: name, visible: isFiltered, css: { 'selected': isSelected }, click: $root.listItemClick"></li>
       </ul>
     </div>
     <div class="burger-button-wrapper">
-      <div id="burger-button" class="burger-button" data-bind="click: burgerButtonClick">
-        <div class="burger-button-div">
-        </div>
+      <div id="burger-button" class="burger-button" data-bind="click: toggleFilterMenuOpen">
+        <div class="burger-button-div" data-bind="css: {open: menuIsOpen}"></div>
       </div>
     </div>
   </div>
