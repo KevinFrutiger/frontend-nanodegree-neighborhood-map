@@ -178,7 +178,7 @@ $(function() {
       self.toggleMarkerAnimation(place.marker);
       self.toggleMarkerSelectedState(place.marker);
       self.addInfoWindow(place);
-    }
+    };
 
     /**
      * Toggles the filter menu open and closed.
