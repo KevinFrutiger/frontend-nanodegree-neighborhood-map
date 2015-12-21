@@ -4,7 +4,13 @@ This was the fifth project in the Udacity Front-End Nanodegree. The objective wa
 
 ## Running the application
 
-You can run the application [here](https://kevinfrutiger.github.io/frontend-nanodegree-neighborhood-map/).
+You can run the live application [here](https://kevinfrutiger.github.io/frontend-nanodegree-neighborhood-map/).
+
+You can run the files locally by doing the following:
+
+1. Download the .zip file using the **Download ZIP** button located in the GitHub sidebar (or clone the repository).
+2. Unzip the file
+3. Point your browser to index.html in the **src** folder of the files that you just unzipped to run the non-minified files. Point your browser to index.html in the **deploy** folder to run the same files found on the live site.
 
 ### Filter the map results
 
