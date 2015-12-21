@@ -158,20 +158,27 @@ $(function() {
      * @param {Place} place - The corresponding Place that was clicked.
      */
     this.listItemClick = function(place) {
-      // Highlight this item.
-      self.toggleListItemSelection(place);
+      self.selectPlace(place);
 
       // Re-center the map to the corresponding location/marker.
       self.map.panTo(place.position);
+
+      // On mobile, close the list. Only applies to the small screen stylesheet.
+      self.toggleFilterMenuOpen('closed');
+    };
+
+    /**
+     * Sets the list and marker to their selected states.
+     * @param {Place} place - The place to highlight.
+     */
+    this.selectPlace = function(place) {
+      self.toggleListItemSelection(place);
 
       // Bounce the marker and open the info window.
       self.toggleMarkerAnimation(place.marker);
       self.toggleMarkerSelectedState(place.marker);
       self.addInfoWindow(place);
-
-      // On mobile, close the list. Only applies to the small screen stylesheet.
-      self.toggleFilterMenuOpen('closed');
-    };
+    }
 
     /**
      * Toggles the filter menu open and closed.
@@ -227,6 +234,7 @@ $(function() {
 
       // Initialize the map.
       self.map = new google.maps.Map($('#map')[0], mapOptions);
+
       // Initialize the Places service.
       self.placesService = new google.maps.places.PlacesService(self.map);
 
@@ -287,11 +295,10 @@ $(function() {
     };
 
     /**
-     * Adds a marker to the map, stores it in the provided place, and sets up
+     * Adds a marker to the map, stores it in the provided Place, and sets up
      * listeners.
-     * @param {string} placeId - The place id to use in the marker options.
-     * @param {google.maps.LatLng} location - The location to use in the marker
-     *    options.
+     * @param {Place} place - The Place to use for the lat/lng and store the
+     *     marker.
      */
     this.addMarker = function(place) {
       // Add marker to the map.
@@ -307,15 +314,7 @@ $(function() {
 
       // Listen for clicks.
       marker.addListener('click', function() {
-        // Highlight the corresponding list item.
-        self.toggleListItemSelection(place);
-
-        // Bounce the marker.
-        self.toggleMarkerAnimation(marker);
-        self.toggleMarkerSelectedState(marker);
-
-        // Open the info window.
-        self.addInfoWindow(place);
+        self.selectPlace(place);
       });
 
       // Add this marker's LatLng to the extents of the map bounds and recenter.
@@ -334,6 +333,7 @@ $(function() {
      * @param {google.maps.Marker} markerToToggle - The marker to toggle.
      */
     this.toggleMarkerSelectedState = function(markerToToggle) {
+      // Loop through all the markers and set their icon.
       for (var i = 0, len = self.places().length; i < len; i++) {
         var marker = self.places()[i].marker;
 
