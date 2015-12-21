@@ -19,4 +19,4 @@ When the appliation loads, you'll see a Google Map with markers designating some
 
 ### Filter the map results
 
-On the left side of the application is the filter menu. On smaller screens it's hidden behind the menu icon. Simple click/tap the icon to display the filter. The map displays markers for the places listed in this menu. You can filter the locations shown by entering text in the input field, and the list and markers will only display for those place names that match the text you've entered.
+On the left side of the application is the filter menu. On smaller screens it's hidden behind the menu icon. Simply click/tap the icon to display the filter. The map displays markers for the places listed in this menu. You can filter the locations shown by entering text in the input field, and the list and markers will only display for those place names that match the text you've entered.
