@@ -44,6 +44,10 @@ $(function() {
         @type {google.maps.LatLng} */
     this.position = null;
 
+    /** The marker object for this location.
+        @type {google.maps.Marker} */
+    this.marker = null;
+
     /** Whether the Place is included in filtered results.
         @type {boolean} */
     this.isFiltered = ko.observable(true);
@@ -67,10 +71,6 @@ $(function() {
     /** The Google Map
         @type {google.maps.Map} */
     this.map = null;
-
-    /** All the Markers on the map, keyed by placeId for Place instances.
-        @type {Object.<string, google.maps.Marker>} */
-    this.markers = {};
 
     /** The InfoWindow.
         @type {google.maps.InfoWindow} */
@@ -165,10 +165,9 @@ $(function() {
       self.map.panTo(place.position);
 
       // Bounce the marker and open the info window.
-      var marker = self.markers[place.placeId];
-      self.toggleMarkerAnimation(marker);
-      self.toggleMarkerSelectedState(marker);
-      self.addInfoWindow(marker, place.placeId);
+      self.toggleMarkerAnimation(place.marker);
+      self.toggleMarkerSelectedState(place.marker);
+      self.addInfoWindow(place.marker, place.placeId);
 
       // On mobile, close the list. Only applies to the small screen stylesheet.
       self.toggleFilterMenuOpen('closed');
@@ -273,20 +272,20 @@ $(function() {
             // Query the Places API.
             self.placesService.textSearch(request, function(results, status) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
-                // Add a marker to the map.
-                self.addMarker(results[0].place_id,
-                               results[0].geometry.location);
 
                 // Store data to our Places object so we don't have to requery.
                 place.placeId = results[0].place_id;
                 place.position = results[0].geometry.location;
                 place.types = results[0].types;
+
+                // Add a marker to the map.
+                place.marker = self.addMarker(results[0].place_id,
+                                              results[0].geometry.location);
               }
             });
           } else { // We have a marker for this place already.
 
-            // Get the marker for this place.
-            var marker = self.markers[place.placeId];
+            var marker = place.marker;
 
             // Show/hide based on whether place is in the filtered list.
             marker.setVisible(place.isFiltered());
@@ -301,10 +300,9 @@ $(function() {
 
     /**
      * Adds a marker to the map and sets up listeners.
-     * @param {string} placeId - The placeId to use as a key to store in the
-     *     markers object.
-     * @param {google.maps.LatLng} location - The location for the place in the
-     *     marker options.
+     * @param {string} placeId - The place id to use in the marker options.
+     * @param {google.maps.LatLng} location - The location to use in the marker
+     *    options.
      */
     this.addMarker = function(placeId, location) {
       // Add marker to the map.
@@ -331,15 +329,14 @@ $(function() {
         self.addInfoWindow(marker, placeId);
       });
 
-      // Store a reference to this marker.
-      self.markers[placeId] = marker;
-
       // Add this marker's LatLng to the extents of the map bounds and recenter.
       self.mapBounds.extend(location);
       self.map.fitBounds(self.mapBounds);
       self.map.setCenter(self.mapBounds.getCenter());
       // TODO: Move fit and center out of here and track status of adding all
       // markers so we can fit and center once.
+
+      return marker;
 
     };
 
@@ -348,8 +345,8 @@ $(function() {
      * @param {google.maps.Marker} markerToToggle - The marker to toggle.
      */
     this.toggleMarkerSelectedState = function(markerToToggle) {
-      for (var key in self.markers) {
-        var marker = self.markers[key];
+      for (var i = 0, len = self.places.length; i < len; i++) {
+        var marker = self.places[i].marker;
 
         if (marker === markerToToggle) {
           marker.setIcon(self.markerIcons.SELECTED);
@@ -365,8 +362,8 @@ $(function() {
      */
     this.toggleMarkerAnimation = function(markerToAnimate) {
       // Loop through all markers and set their animation state.
-      for (var key in self.markers) {
-        var marker = self.markers[key];
+      for (var i = 0, len = self.places.length; i < len; i++) {
+        var marker = self.places[i].marker;
 
         // If this is the marker we want to animate and it's not
         // already animating...
@@ -406,13 +403,14 @@ $(function() {
      *     places array.
      */
     this.addInfoWindow = function(marker, placeId) {
+
+      var place = self.getPlaceFromId(placeId);
+
       // If the info window is already opened, clean up and close it.
       if (self.infoWindow) {
         google.maps.event.clearListeners(self.infoWindow, 'closeclick');
         self.infoWindow.close();
       }
-
-      var place = self.getPlaceFromId(placeId);
 
       // Build nodes for info window content.
       //
@@ -452,6 +450,7 @@ $(function() {
         // Event fires every time content is updated, so remove the listener.
         google.maps.event.clearListeners(self.infoWindow, 'domready');
 
+
         self.populateInfoWindow(place);
       });
 
@@ -462,7 +461,7 @@ $(function() {
     /**
      * Gets content from the Wikipedia API and calls to append it to the
      * info window content.
-     * @param {Place} place - The Place to store/retrieve the Wikipedia data.
+     * @param {number} place - The Place to store/retrieve the Wikipedia data.
      */
     this.populateInfoWindow = function(place) {
 
