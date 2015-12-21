@@ -1,8 +1,7 @@
 // Global object for any needed external references.
 var app = {};
 
-// TODO: Prefix observables with "o" or something to more easily
-// differentiate them from methods.
+// TODO: Prefix observables to more easily differentiate them from methods.
 // TODO: See if it's cleaner to store markers in the places observable.
 
 $(function() {
@@ -156,7 +155,7 @@ $(function() {
 
     /**
      * KO click handler for the items in the list.
-     * @param {Place} place - The correspanding Place that was clicked.
+     * @param {Place} place - The corresponding Place that was clicked.
      */
     this.listItemClick = function(place) {
       // Highlight this item.
