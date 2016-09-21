@@ -10,7 +10,7 @@ You can run the application <a href="https://kevinfrutiger.github.io/frontend-na
 
 Alternatively, you can run the files locally by doing the following:
 
-1. Download the .zip file using the **Clone or Download** button located in the GitHub sidebar (or clone the repository).
+1. Download the .zip file using the **Clone or download** button located in the GitHub sidebar (or clone the repository).
 2. Unzip the file
 3. To run the application, you must run the files through a web server. [http-server](https://www.npmjs.com/package/http-server) is a simple local server you can get via npm.
 4. Point your browser to **index.html** in the **src** folder of the files that you just unzipped to run the non-minified files. Point your browser to **index.html** in the **deploy** folder to run the same files found on the live site.
