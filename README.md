@@ -1,5 +1,7 @@
 # Neighborhood Map project
 
+*This application no longer functions properly due to changes in Google's requirements for the use of Google Maps. You can likely get it working by simply updating any API URLs to include your API key, but see the errors in the console of your browser's developer tools for more information.*
+
 <a href="https://kevinfrutiger.github.io/frontend-nanodegree-neighborhood-map/" target="_blank">View the live application</a>
 
 This was the fifth project in the _Front-End Web Developer Nanodegree_. The objective was to build an application featuring a Google Map and a filtered list of places, utilizing the Knockout.js MVVM framework, the Google Maps API, and additional third-party APIs via jQuery AJAX requests.
