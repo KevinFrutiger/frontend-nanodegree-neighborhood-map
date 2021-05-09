@@ -46,8 +46,8 @@ module.exports = function(grunt) {
       dist: {
         options: {
           patterns: [{
-            match: /<link rel=\"stylesheet\" href=\"css\/style-small.css\" media=\"screen and \(max-width: 800px\)\">/g,
-            replacement: '<style>@media screen and (max-width: 800px) {' +
+            match: /<link rel=\"stylesheet\" href=\"css\/style-small.css\" media=\"screen and \(max-width:800px\)\">/g,
+            replacement: '<style>@media screen and (max-width:800px) {' +
                          '<%= grunt.file.read("deploy/css/style-small.css") %>' +
                          '}</style>'
           }]
